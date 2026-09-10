@@ -51,12 +51,12 @@ export function simulatePrediction(points: SpectrumPoint[], crop: Crop) {
   const variation = points.reduce((sum, point) => sum + Math.abs(point.reflectance - mean), 0) / points.length
   const protein = Math.round((5.2 + mean * 10 + variation * 8) * 100) / 100
   const moisture = Math.round((7.5 + (1 - mean) * 8 + variation * 4) * 100) / 100
-  return { protein, moisture: crop === 'Sorghum' ? moisture : Math.round((moisture - 0.8) * 100) / 100, mean: Math.round(mean * 1000) / 1000, variation: Math.round(variation * 1000) / 1000 }
+  return { protein, moisture: crop === 'Sorghum' ? moisture : null, mean: Math.round(mean * 1000) / 1000, variation: Math.round(variation * 1000) / 1000 }
 }
 
 export function toCsv(points: SpectrumPoint[]) { return ['wavelength_nm,reflectance', ...points.map((point) => `${point.wavelength_nm},${point.reflectance}`)].join('\n') }
 export function downloadText(filename: string, content: string, type = 'text/plain') { const blob = new Blob([content], { type }); const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = filename; anchor.click(); URL.revokeObjectURL(url) }
-export function reportText(crop: Crop, sampleName: string, result: ReturnType<typeof simulatePrediction>) { return `Grain Quality Prediction Using Hyperspectral Imaging\n\nDEMO REPORT — SIMULATED RESULTS\nSample: ${sampleName}\nCrop: ${crop}\nProtein: ${result.protein} g/100 g\nMoisture: ${result.moisture} g/100 g\n\nThese values were generated deterministically from synthetic reflectance data. They have no scientific predictive validity and are not laboratory measurements.` }
+export function reportText(crop: Crop, sampleName: string, result: ReturnType<typeof simulatePrediction>) { return `Grain Quality Prediction Using Hyperspectral Imaging\n\nDEMO REPORT — SIMULATED RESULTS\nSample: ${sampleName}\nCrop: ${crop}\nProtein: ${result.protein} g/100 g${result.moisture === null ? '' : `\nMoisture: ${result.moisture} g/100 g`}\n\nThese values were generated deterministically from synthetic reflectance data. They have no scientific predictive validity and are not laboratory measurements.` }
 export function futureModelIntegrationPoint() { return 'future-model-api' }
 export const wavelengthBands = [
   { label: 'Visible', range: '400–700 nm', color: 'var(--chart-1)' },
