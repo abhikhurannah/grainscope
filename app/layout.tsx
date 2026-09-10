@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'GrainScope · Grain Quality Prediction Demo',
+  description: 'An educational hyperspectral imaging prototype for grain protein and moisture prediction.',
   generator: 'v0.app',
   icons: {
     icon: [
